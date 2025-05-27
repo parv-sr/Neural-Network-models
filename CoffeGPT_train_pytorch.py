@@ -17,14 +17,14 @@ bias2 = torch.tensor(0.1, requires_grad=True)
 weight_out = torch.tensor([0.1, 0.3], requires_grad=True)
 bias_out = torch.tensor(0.6, requires_grad=True)
 
-epochs = 10
-eta = 0.1
-error_list = []
+epochs = 1000
+eta = 0.05
 error_history = []
 
 # forward pass (training loop from here)
 
 for k in range(epochs):
+    error_list = []
 
     for i in range(len(data["age"])):
         input_vec = torch.tensor([data["age"][i]/100, data["time"][i]/24, data["weather"][i]/2])
@@ -42,7 +42,7 @@ for k in range(epochs):
         y_pred = torch.sigmoid(z_out)
 
         loss = F.binary_cross_entropy(y_pred, y_actual)
-        error_list.append(loss)
+        error_list.append(loss.detach())
 
 
         # backpropagation (gradient descent from here onwards)
@@ -69,7 +69,8 @@ for k in range(epochs):
         # pytorch inbuilt optimisation: 
         #params = [weight_vec1, bias1, weight_vec2, bias2, weight_out, bias_out]
         #optimiser = torch.optim.SGD(params, lr=0.1)
-        
+
+    print(k, "th epoch done")        
         
     avg_error = sum(error_list)/len(error_list)
     error_history.append(avg_error)
@@ -79,11 +80,30 @@ for k in range(epochs):
 avg_error_after_all_epochs = sum(error_history)/len(error_history)
 print(avg_error_after_all_epochs)
 
-plt.plot(error_history)
+plt.plot([e.item() for e in error_history])
+plt.title("Error Over Epochs")
+plt.xlabel("Epoch")
+plt.ylabel("Average Loss")
+plt.grid(True)
 plt.show()
 
 
 
+final_model_weights = {
+    "weight_vec1" : weight_vec1.detach().numpy().tolist(),
+    "bias1" : bias1.detach().numpy().tolist(),
+    "weight_vec2" : weight_vec2.detach().numpy().tolist(),
+    "bias2" : bias2.detach().numpy().tolist(),
+    "weight_out" : weight_out.detach().numpy().tolist(),
+    "bias_out" : bias_out.detach().numpy().tolist()
+}
+
+with open("coffee_preference_model_saved_weights.json", "w") as f:
+    try:
+        json.dump(final_model_weights, f)
+        print("Weights saved to coffee_preference_model_saved_weights.json")
+    except Exception as e:
+        print("Error while saving weights!")
 
 
 
