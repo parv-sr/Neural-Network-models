@@ -6,7 +6,7 @@ time = []
 weather = []
 labels = []
 
-for i in range(1000):
+for i in range(10000):
     age.append(random.randint(1, 100))
     time.append(random.randint(0, 24))
     weather.append(random.randint(0, 2))
@@ -31,7 +31,7 @@ records = {
 
 
 try:
-    with open("coffee_preference_dataset.json", "w") as f:
+    with open("coffee_preference_dataset_10krec.json", "w") as f:
         json.dump(records, f)
 except Exception as e:
     print("Error while creating file")
