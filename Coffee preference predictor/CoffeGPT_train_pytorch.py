@@ -3,7 +3,7 @@ import torch.nn.functional as F
 import json
 import matplotlib.pyplot as plt
 
-with open(r"C:\\F DRIVE\\Python\\Neural Network models\\coffee_preference_dataset.json", "r") as f:
+with open(r"C:\F DRIVE\Python\Neural Network models\Coffee preference predictor\coffee_preference_dataset.json", "r") as f:
     data = json.load(f)
 
 
@@ -17,7 +17,7 @@ bias2 = torch.tensor(0.1, requires_grad=True)
 weight_out = torch.tensor([0.1, 0.3], requires_grad=True)
 bias_out = torch.tensor(0.6, requires_grad=True)
 
-epochs = 1000
+epochs = 5000
 eta = 0.05
 error_history = []
 
